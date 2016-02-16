@@ -26,32 +26,42 @@ function Get-ChildItem-Color {
 
     $color_fore = $Host.UI.RawUI.ForegroundColor
 
-    $compressed_list = @(".7z", ".gz", ".rar", ".tar", ".zip")
-    $executable_list = @(".exe", ".bat", ".cmd", ".py", ".pl", ".ps1",
-                         ".psm1", ".vbs", ".rb", ".reg", ".fsx")
-    $dll_pdb_list = @(".dll", ".pdb")
-    $text_files_list = @(".csv", ".lg", "markdown", ".rst", ".txt")
-    $configs_list = @(".cfg", ".config", ".conf", ".ini")
+    $compressed_list = @(".7z", ".gz", ".rar", ".tar", ".zip", ".nupkg")
+    $executable_list = @(".exe", ".bat", ".cmd", ".pl", ".ps1",
+                         ".psm1", ".vbs", ".rb", ".reg", ".fsx", ".sh")
+    $dll_pdb_list = @(".dll", ".pdb", ".user", ".suo", ".manifest", ".class", ".backup")
+    $text_files_list = @(".csv", ".lg", ".markdown", ".rst", ".txt", ".md")
+    $configs_list = @(".cfg", ".config", ".conf", ".ini", ".gitconfig", ".gitattributes", ".gitignore")
 
     $color_table = @{}
     foreach ($Extension in $compressed_list) {
         $color_table[$Extension] = "Yellow"
     }
 
+    foreach ($Extension in @(".xml", ".json", ".yaml", ".csv", ".log")) {
+        $color_table[$Extension] = "DarkCyan"
+    }
+    foreach ($Extension in @(".cs", ".js", ".java", ".vb", ".c", ".cpp", ".h", ".rb", ".py", ".go", ".scad", ".lua")) {
+        $color_table[$Extension] = "DarkMagenta"
+    }
+    foreach ($Extension in @(".csproj", ".vbproj", ".sln", ".sublime-project")) {
+        $color_table[$Extension] = "Magenta"
+    }
+
     foreach ($Extension in $executable_list) {
-        $color_table[$Extension] = "Blue"
-    }
-
-    foreach ($Extension in $text_files_list) {
-        $color_table[$Extension] = "Cyan"
-    }
-
-    foreach ($Extension in $dll_pdb_list) {
         $color_table[$Extension] = "Darkgreen"
     }
 
+    foreach ($Extension in $text_files_list) {
+        $color_table[$Extension] = "Blue"
+    }
+
+    foreach ($Extension in $dll_pdb_list) {
+        $color_table[$Extension] = "DarkGray"
+    }
+
     foreach ($Extension in $configs_list) {
-        $color_table[$Extension] = "DarkYellow"
+        $color_table[$Extension] = "Green"
     }
 
     $i = 0
@@ -61,7 +71,7 @@ function Get-ChildItem-Color {
     $items |
     %{
         if ($_.GetType().Name -eq 'DirectoryInfo') {
-            $c = 'Green'
+            $c = 'DarkYellow'
             $length = ""
         } else {
             $c = $color_table[$_.Extension]
